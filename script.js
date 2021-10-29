@@ -1,5 +1,12 @@
+var totalKasus = {
+    'kasusPosi' : 0,
+    'kasusSemb' : 0,
+    'kasusMeni' : 0,
+}
+
 function renderData(jumlahKasus){
     let tableCasesEl = document.getElementById("tableCases")
+    
     jumlahKasus.forEach(kasus => {
         tableCasesEl.innerHTML += `
         <tr>
@@ -9,31 +16,13 @@ function renderData(jumlahKasus){
             <td>${kasus.kasusMeni}</td>
         </tr>
         `
+        totalKasus.kasusPosi += kasus.kasusPosi
+        totalKasus.kasusSemb += kasus.kasusSemb
+        totalKasus.kasusMeni += kasus.kasusMeni
     });
-}
-
-function jumlahPositif(jumlahKasus){
-    let hasilPositif = 0
-    jumlahKasus.forEach(kasus => {
-        hasilPositif += Number(kasus.kasusPosi) 
-    });
-    document.getElementById("positif").innerHTML = `Positif: ${hasilPositif}`
-}
-
-function jumlahSembuh(jumlahKasus){
-    let hasilSembuh = 0
-    jumlahKasus.forEach(kasus => {
-        hasilSembuh += Number(kasus.kasusSemb)
-    });
-    document.getElementById("sembuh").innerHTML = `Sembuh: ${hasilSembuh}`
-}
-
-function jumlahMeninggal(jumlahKasus){
-    let hasilMeninggal = 0
-    jumlahKasus.forEach(kasus => {
-        hasilMeninggal += Number(kasus.kasusMeni)
-    });
-    document.getElementById("meninggal").innerHTML = `Meninggal: ${hasilMeninggal}`
+    document.getElementById("positif").innerHTML = `Positif: ${totalKasus.kasusPosi}`
+    document.getElementById("sembuh").innerHTML = `Sembuh: ${totalKasus.kasusSemb}`
+    document.getElementById("meninggal").innerHTML = `Meninggal: ${totalKasus.kasusMeni}`
 }
 
 fetch('https://indonesia-covid-19.mathdro.id/api/provinsi')
@@ -41,7 +30,4 @@ fetch('https://indonesia-covid-19.mathdro.id/api/provinsi')
     .then(kasus => kasus.data)
     .then(jumlahKasus => {
         renderData(jumlahKasus)
-        jumlahPositif(jumlahKasus)
-        jumlahSembuh(jumlahKasus)
-        jumlahMeninggal(jumlahKasus)
     })
